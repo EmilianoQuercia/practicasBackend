@@ -27,5 +27,5 @@ document.getElementById('send').addEventListener('click', function(){
     const password = document.getElementById('password').value;
     const data = {email,password}
     fetch(`/login/user/?email=${email}&password=${password}`)
-    fetch('/login/perfil').then(response => response)
+    fetch('/login/perfil').then(response => response.json())
 })

@@ -15,12 +15,12 @@ router.get('/user', async (req, res) => {
         const result = await registroModel.findOne({email: email, password: password})
         console.log('result', result)
         if (!result){
-            res.send('Ususario no encontrado')
+           return res.send('Ususario no encontrado')
         }
         req.session.user = email
         req.session.admin = true
         console.log(req.session.admin)
-        res.send('success')
+        return res.send('success')
     } catch (error) {
         res.status(500).send({error: error});
     }
@@ -36,10 +36,10 @@ const auth = async (req, res, next) => {
 }
 
 
-router.get('/perfil', auth, (req,res)=>{
-    if (req.session?.admin){
+router.get('/perfil', auth, async (req,res)=>{
+    if (await req.session?.admin){
         console.log('entre')
-        res.render('perfil',{})
+        res.render('perfil',{}) 
     }
 })
 

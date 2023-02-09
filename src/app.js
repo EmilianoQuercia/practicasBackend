@@ -4,13 +4,18 @@ import { engine } from 'express-handlebars'
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
+import * as dotenv from "dotenv"
 
 import loginRouter from './routes/login.routes.js'
 import registroRouter from './routes/registro.routes.js'
 
+dotenv.config();
 const app = express();
 const PORT = 8080
-const DB_URL= 'mongodb+srv://emilianoquercia:MongoDb1986@cluster0.zfmpslu.mongodb.net/Logueo?retryWrites=true&w=majority'
+const USER_MONGO = process.env.USER_MONGO
+const PASSWORD_MONGO = process.env.PASSWORD_MONGO
+const DB_MONGO = process.env.DB_MONGO
+const DB_URL= `mongodb+srv://${USER_MONGO}:${PASSWORD_MONGO}@cluster0.zfmpslu.mongodb.net/${DB_MONGO}?retryWrites=true&w=majority`
 
 app.use(express.json());
 
@@ -27,7 +32,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: DB_URL,
         mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true},
-        ttl: 15
+        ttl: 10000
     }),
     secret: 'codigo-s3cr3t0',
     resave: true,
