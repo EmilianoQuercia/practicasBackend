@@ -10,24 +10,27 @@ router.get('/', (req, res) => {
 
 router.get('/user', async (req, res) => {
     const {email, password} = req.query
-    console.log(email, password)
+    console.log('User',{email, password})
     try {
         const result = await registroModel.findOne({email: email, password: password})
         console.log('result', result)
-        if (!result){
-           return res.send('Ususario no encontrado')
+        if (result){
+          req.session.user = email
+          req.session.admin = true
+          console.log('admin ',req.session.admin)
+          return res.send('success')
+        }else{
+            res.send('error')
         }
-        req.session.user = email
-        req.session.admin = true
-        console.log(req.session.admin)
-        return res.send('success')
+
+        
     } catch (error) {
         res.status(500).send({error: error});
     }
     
 });
 const auth = async (req, res, next) => {
-    console.log(await req.session.user)
+    console.log('auth', req.session.user)
     if (await req.session?.admin){
         return next()
     }else{
